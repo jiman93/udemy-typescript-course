@@ -1,3 +1,4 @@
+import { Collection } from './Collection';
 import { Eventing } from './Eventing';
 import { ApiSync } from './ApiSync';
 import { Attributes } from './Attributes';
@@ -19,10 +20,15 @@ export class User extends Model<UserProps> {
       new ApiSync<UserProps>(rootUrl)
     );
   }
-  // public events: Eventing = new Eventing();
-  // public sync: Sync<UserProps> = new Sync<UserProps>(rootUrl);
-  // public attributes: Attributes<UserProps>;
-  // constructor(attrs: UserProps) {
-  //   this.attributes = new Attributes<UserProps>(attrs);
-  // }
+
+  static buildUserCollection(): Collection<User, UserProps> {
+    return new Collection<User, UserProps>(rootUrl, (json: UserProps) =>
+      User.buildUser(json)
+    );
+  }
+
+  setRandomAge(): void {
+    const age = Math.round(Math.random() * 100);
+    this.set({ age });
+  }
 }
